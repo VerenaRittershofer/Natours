@@ -9,7 +9,7 @@ A website for adventurous tours built with Sass (still in progress)
 * how to use the background-clip property
 * how to transform multiple properties simultanously
 * how to use the outline-offset property together with outline
-* how to style element hat are not hovered while others are
+* how to style element that are not hovered while others are
 * how and when to use the direct child selector
 * how to use perspective in CSS
 * how to use the backface-visibility property
