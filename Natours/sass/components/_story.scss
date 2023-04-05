@@ -1,0 +1,64 @@
+.story {
+    width: 75%;
+    margin: 0 auto; //block-element inside a block element
+    box-shadow: 0 3rem 6rem rgba($color-black, .2);
+    background-color: rgba($color-white, .6); 
+    //if we set the opacity here we make sure that only the background has a lower opacity and not everything else as well
+    border-radius: 3px;
+    padding: 6rem;
+    padding-left: 9rem; //as we transformed the __shape element to the left, we need some extra padding on the left. 
+    font-size: $default-font-size;
+    transform: skewX(-12deg); 
+
+    &__shape {
+        width: 15rem; 
+        height: 15rem; 
+        float: left; //to make the element float around the text.
+        -webkit-shape-outside: circle(50% at 50% 50%);  //to make it work in Chrome and Safari
+        shape-outside: circle(50% at 50% 50%); //defines how and where the content floats around an element (here: circle).
+        //first number: radius --> in this case 50% of the width and the height of the element (= 7.5rem). 
+        //second number: center of the circle
+        //In case for this to work the element must be floated and have a defined width and height!!
+        -webkit-clip-path: circle(50% at 50% 50%);
+        clip-path: circle(50% at 50% 50%); //actually forms the circle of the image
+        transform: translateX(-3rem) skewX(12deg); 
+        //with floated elements you shouldn't mess around with margins, so use transform instead.
+        //we have to skew this element here and not with the & < * Selector, because only on transform property can be put on an element. 
+        //And the last on is being executed. 
+        position: relative; 
+    }
+
+    &__img {
+        height: 100%; //will have 100% of the height of the parent --> 15rem 
+        transition: all .5s;
+        transform: translateX(-4rem) scale(1.4); //translateX() to position the picture to the center and scale() for the hover effect.    
+    }
+
+    &__text {
+        transform: skewX(12deg) //has to be skewed in the other direction to be straight again. 
+    }
+
+    &__caption{
+        position: absolute; 
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 20%); //in the y-direction we can use 20% because we want it to sit lower so it can zoom in once we hover the story. 
+        color: $color-white;
+        text-transform: uppercase;
+        font-size: 1.7rem; 
+        text-align: center;
+        opacity: 0; //we only want to see it once the story is hovered.
+        transition: all .5s; 
+        backface-visibility: hidden; //removes the glitch which occurs when we use transform: translate(... , ...)
+    }
+
+    &:hover &__caption { //so when we hover the story the caption changes
+        opacity: 1;
+        transform: translate(-50%, -50%); //so the text moves to the center again. 
+    }
+
+    &:hover &__img {
+        filter: blur(3px) brightness(80%); //many options for filters, with brigthness below 100% the picture appears daker (above lighter)
+        transform: translateX(-4rem) scale(1); //because we scaled the original image up, we have the zoom-out effect when we set it to 1 again.
+    }
+}

@@ -1,0 +1,107 @@
+.form{
+    &__group:not(:last-child){ //everythin except the last child
+        margin-bottom: 2rem; 
+    }
+
+    &__input{
+        font-size: 1.5rem; 
+        font-family: inherit; //forms don't naturally inherit the font-family of their parent so we have to manually do it. 
+        color: inherit; 
+        padding: 1.5rem 2rem; 
+        //in buttons and form elements the button on the left/right should always be more than on the top/bottom (looks better) 
+        border-radius: 2px; 
+        background-color: rgba($color-white, .5);
+        border: none; 
+        border-bottom: 3px solid transparent; 
+        //we add a transparent underline here as well, so that if we focus the input it doesn't get bigger due to the green underline 
+        //instead it keeps the same size
+        width: 90%;
+        display: block; //so that is occupies the whole line
+        transition: all .3s; 
+
+        
+        &:focus{ //with focus we can style the input once you want to write in it
+            outline: none; //to get rid of the default outline
+            box-shadow: 0 1rem 2rem rgba($color-black, .1);
+            border-bottom: 3px solid $color-primary; 
+        }
+
+        &:focus:invalid { //to target an invalid focused element (so e.g. if someone typed an incorrect email into the input)
+            border-bottom: 3px solid $color-secondary-dark;
+        }
+
+        &::-webkit-input-placeholder{ //we can use this pseudo-class to style the placeholder of the input
+            color: $color-grey-dark-2;
+        }
+    }
+
+
+    &__label{
+        font-size: 1.2rem;
+        font-weight: 700; 
+        margin-left: 2rem; 
+        margin-top: .7rem;
+        display: block;
+        transition: all .3s;
+    }
+
+    &__input:placeholder-shown + &__label{ 
+        //when the placeholder is shown on the input element 
+        //adjacent sibling selector (+): label and input are children of form__group so they are siblings (same hierarchical level)
+        //adjacent sibling is a sibling that comes immediatly after the element we are selecting 
+        //the label must be after the input to make the sibling selector work!!
+        //for general siblings use the general sibling selector (~)
+        opacity: 0; //we have to determine the opacity because visibility cannot be animated
+        visibility: hidden; //we have to use visbility here because with opacity only the element will still be on the page 
+        transform: translateY(-4rem); //we position it higher so that it moves down from the position where we would write the input
+    }
+
+    &__radio-group{
+       width: 49%;
+       display: inline-block;  
+    }
+
+    &__radio-input{ //to hide the acutal input radio button, so we only see the styled one
+        display: none; 
+    }
+
+    &__radio-label{
+        font-size: $default-font-size;
+        cursor: pointer; //to make the cursor to a hand
+        position: relative;  
+        padding-left: 4rem;
+    }
+
+    &__radio-button{ //this is the outer circle
+        height: 3rem;
+        width: 3rem; 
+        border: 5px solid $color-primary;
+        border-radius: 50%;
+        display: inline-block; //has to be a block element for the upper properties to work
+        position: absolute; 
+        left: 0;
+        top: -.4rem; //the outline-circle needs to be position where the acutal input radio button is
+       
+
+        &::after { //this is the inner circle
+            content: "";
+            display: block; 
+            height: 1.3rem; //when we form a circle the height and width should be the same
+            width: 1.3rem; 
+            border-radius: 50%;
+            background-color: $color-primary;
+            position: absolute; //the parent (radio-button) doesn't necessarily need to be position relativ as long as we determine its position
+            top: 50%;
+            left:50%; 
+            transform: translate(-50%, -50%); 
+            opacity: 0; 
+            transition: opacity .2s; //we only change the opacity so we don't write all 
+        } 
+    }
+
+    &__radio-input:checked + &__radio-label &__radio-button::after{ 
+        //to select all radio inputs (buttons) that are checked
+        //+ to select the adjacent sibling and then the child (span-element) that we acutally want to style
+        opacity: 1; 
+    }
+}

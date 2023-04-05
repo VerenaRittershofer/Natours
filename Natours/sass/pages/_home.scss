@@ -1,0 +1,66 @@
+.section-about{
+    background-color:$color-grey-light-1;
+    padding: 40rem 0; 
+    margin-top: -25vh; 
+
+    @include respond(tab-land){
+        padding: 25rem 0; 
+    }
+
+}
+
+.section-features{
+    padding: 20rem 0; 
+    background-image: linear-gradient(to right bottom,
+            rgba($color-primary-light, 0.8),
+            rgba($color-primary-dark, 0.8)),
+        url(../img/nat-4.jpg);
+    background-size: cover;
+    
+    transform: skewY(-7deg);
+    margin-top: -11rem;
+
+    & > * {
+        transform: skewY(7deg);
+    }
+    
+}
+
+.section-tours{
+    background-color:$color-grey-light-1;
+    padding: 40rem 0 15rem 0; 
+    margin-top: -12rem; 
+}
+
+.section-stories{
+  padding: 15rem 0;
+  position: relative; //so that the background-video can have an absolute positioning 
+}
+
+.section-book{
+    padding: 15rem 0;
+    background-image: linear-gradient(to right bottom, $color-primary-light, $color-primary-dark);
+}
+
+.book{
+    background-image: linear-gradient(105deg, 
+                                    rgba($color-white, .9) 0%, 
+                                    rgba($color-white, .9) 50%, 
+                                    transparent 50%),
+    //we can use degree instead of to the right bottom                                
+    //solid-color-gradient: when we set the colors we want to mix into each other at the same percentage (here: 50%), 
+    //then we mix solid colors into each other. There's no gradient anymore but a hard cut.
+    //the second "color" in this case is transparent 
+                                    url(../img/nat-10.jpg); 
+                                    //we specify the picture here because we want the book as a seperate reusuable component
+    background-size: 100%; //100% hat the same effect as cover
+    border-radius: 3px; 
+    box-shadow: 0 1.5rem 4rem rgba($color-black, .3);
+    
+    height: 50rem;
+
+    &__form{ //left side of the book
+        width: 50%;
+        padding: 6rem;
+    }
+}

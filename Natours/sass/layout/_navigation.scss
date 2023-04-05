@@ -1,0 +1,179 @@
+.navigation{
+    &__checkbox{ //hidden checkbox
+        display:none; 
+    }
+
+// Input Label -> Styled as a Button
+    &__button{ //this is the button we see as the navigation bar --> sits on top of the background class
+        background-color: $color-white;
+        height: 7rem; //make it a little bigger than the background so it covers it completely
+        width: 7rem; 
+        position: fixed; 
+        top: 6rem; //the button is 1 rem bigger than the background so it's 0.5rem further to the top and the right (vgl. 6.5rem in background)
+        right: 6rem; 
+        border-radius: 50%;
+        z-index: 2000; //higher than the background and the nav
+        box-shadow: 0 1rem 3rem rgba($color-black, .2);
+        text-align: center; //to position the icon and its pseudo-elemnts in the center (parent-element)
+        cursor: pointer; //to make a hand-cursor 
+
+        @include respond(tab-port){
+            top: 4rem; 
+            right: 4rem;
+        }
+    }
+
+    // Background Image / Gradient -> Hidden Behind a Label
+    &__background{ //the background should expand as a circle when we click on the navigation bar
+        height: 6rem; 
+        width: 6rem; 
+        border-radius: 50%; 
+        position: fixed; //we want the navigation bar to be fixed to this position (but takes it out of the normal flow)
+        top: 6.5rem; //we have to position it ourself
+        right: 6.5rem; 
+        background-image: radial-gradient($color-primary-light, $color-primary-dark);
+        //the radial gradient comes from the center of an element and radiates to the edges
+        z-index: 1000; //only works on elements that have their position defined, we set it really high so its on top of all elements on the page
+
+        transition: transform .8s cubic-bezier(0.83, 0, 0.17, 1); 
+        //transition for the animation once we click the button
+        //with cubic-bezier we can make customized ease-in and -out effects (timing of the transition on a curve) --> easeInOutQuint
+
+        @include respond(tab-port){
+            top: 4.5rem; 
+            right: 4.5rem;
+        }
+    }
+
+    &__nav{ //this is the actual opened navbar that occupies the whole webpage
+        height: 100%; 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        z-index: 1500; //higher than the background but lower than the button
+        opacity: 0; //to hide the navbar when it's not clicked
+        width: 0; //we have to set the width to zero otherwise the links can still be clicked eventhough we made them inivisible 
+        transition: all .8s cubic-bezier(0.68, -0.6, 0.32, 1.6); // transition for the animation once we click the botton --> easeInOutBack
+    }
+
+    &__list { //this is centered inside the nav-container
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); 
+        list-style: none; 
+        text-align: center;
+        width: 100%;  
+    }
+
+    &__item{
+        margin: 1rem; 
+
+    }
+
+    &__link{
+        &:link, 
+        &:visited {
+            display: inline-block; //so that the padding is applied
+            font-size: 3rem;
+            font-weight: 300;
+            padding: 1rem 2rem; 
+            color: $color-white;
+            text-decoration: none; 
+            text-transform: uppercase;
+            background-image: linear-gradient(120deg, 
+                                            transparent 0%,
+                                            transparent 50%,
+                                            $color-white 50%
+            ); //solid-color-gradient at 50%
+            background-size: 230%; 
+            //with this we increase the backgroundsize (default=100%)
+            //the background-position by default is 0% = in the x-axis 0% = in the y-axis (which means top left corner)
+            //so if we increase the background with the linear gradient, only the gradient on the left will be visible 
+            //because the right one will be outside of the background-positioning
+            transition: all .4s; 
+
+            span{ //to style the numbers 01,02,03,...
+                margin-right: 1.5rem; 
+                display: inline-block; 
+            }
+        }
+        
+        &:hover,
+        &:active{
+            background-position: 100%;  
+            //when we hover the link we set the background-position in the x-axis to 100%
+            //which means we push it more to the right, so that we only see the gradient on the right side
+            color: $color-primary;
+            transform: translateX(1rem); //to move the letters a little bit to the right as well
+        }
+    }
+
+    //FUNCTIONALITY        
+    &__checkbox:checked ~ &__background  {
+        //when we check the checkbox (hit the label) we want the background to expand 
+        //background is not an immediate after sibling of checkbox so we need ~
+        transform: scale(100);
+    }
+
+    &__checkbox:checked ~ &__nav  {
+        //when we check the checkbox (hit the label) we want the navbar to appear
+        //nav is not an immediate after sibling of checkbox so we need ~
+        opacity: 1; 
+        width: 100%; 
+    }
+ 
+    //ICON
+    &__icon {
+        position: relative; 
+        margin-top: 3.5rem; 
+
+        &,
+        &::before,
+        &::after {
+           width: 3rem;
+           height: 3px; 
+           background-color: $color-grey-dark-3;
+           display: inline-block;  
+        } 
+
+        &::before,
+        &::after {
+            content: ""; //we always have to set the content for pseudo-elements
+            position: absolute; //to position them on top of each other
+            left: 0;
+            transition: transform .2s; 
+        }
+
+        &::before{top: - .7rem; height: 2px; } //move it up, for some reason we have to change the height of the before pseudo-element
+        &::after {top: .8rem} //move it down
+    }
+
+    &__button:hover &__icon::before{ //we can select it like this because the icon is a child element of the button
+        //to expand the lines once we hover over the button
+        top: - 1rem;
+        height: 3px; 
+    }
+
+    &__button:hover &__icon::after{
+        top: 1rem; 
+    }
+
+    &__checkbox:checked + &__button &__icon { //when the checkbox is checked we select the sibling = button to select its child = icon
+        background-color: transparent; //to form the cross we have to make the middle line transparent
+    }
+
+    &__checkbox:checked + &__button &__icon::before { 
+        //when the checkbox is checked we select the sibling = button to select its child = icon and then the pseudo-element of the child = ::before
+        top: 0; //they are positioned in relation to the middle line --> we have to center them again with top:0 
+        height: 3px; 
+        transform: rotate(135deg); //rotating the other lines brings us closer to the X-form
+        //with 180degree - 45degree(rotation that is necessary to form the X) = 135degree --> 3/4 of a half circle spin
+    }
+
+    &__checkbox:checked + &__button &__icon::after { 
+        top: 0;
+        transform: rotate(-135deg);
+    }
+
+}
